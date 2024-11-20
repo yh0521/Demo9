@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="AutoWebGLM: A Large Language Model-based Web Navigating Agent">
+  <meta name="keywords" content="AutoWebGLM, Large Language Model, Web Agent, Reinforcement Learning, Rejection Sampling Finetuning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoWebGLM: A Large Language Model-based Web Navigating Agent</title>
+
+  <script type="module" src="https://md-block.verou.me/md-block.js"></script>
+
+  <!-- Load d3.js -->
+  <script src="https://d3js.org/d3.v4.js"></script>
+
+  <!-- Load plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- Color palette -->
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3plus-text@1"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MZNP3SCQ1V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-MZNP3SCQ1V');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+</head>
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">AutoWebGLM: A Large Language Model-based Web Navigating Agent</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                Hanyu Lai, Xiao Liu, Iat Long Iong, Shuntian Yao, Yuxuan Chen, Pengbo Shen, Hao Yu, Hanchen Zhang, Xiaohan Zhang, Yuxiao Dong, Jie Tang
+              </span>
+            </div>
+            <br>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                Tsinghua University, Beijing University of Posts and Telecommunications, University of Chinese Academy of Sciences, Zhipu AI
+              </span>
+            </div>
+            <i style="font-size: 15px !important;">*Corresponding Authors.</i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container is-max-widescreen">
+      <h2 class="title">Abstract</h2>
+      <p>Large language models (LLMs) have fueled many intelligent web agents, but most existing ones perform far from satisfying in real-world web navigation tasks due to three factors: (1) the complexity of HTML text data (2) versatility of actions on webpages, and (3) task difficulty due to the open-domain nature of the web. In light of these challenges, we develop the open AutoWebGLM based on ChatGLM3-6B. AutoWebGLM can serve as a powerful automated web navigation agent that outperform GPT-4. Inspired by human browsing patterns, we first design an HTML simplification algorithm to represent webpages with vital information preserved succinctly. We then employ a hybrid human-AI method to build web browsing data for curriculum training. Finally, we bootstrap the model by reinforcement learning and rejection sampling to further facilitate webpage comprehension, browser operations, and efficient task decomposition by itself. For comprehensive evaluation, we establish a bilingual benchmark—AutoWebBench—for real-world web navigation tasks. We evaluate AutoWebGLM across diverse web navigation benchmarks, demonstrating its potential to tackle challenging tasks in real environments. Related code, model, and data are released at <a href="https://github.com/THUDM/AutoWebGLM">https://github.com/THUDM/AutoWebGLM</a>.</p>
+    </div>
+  </section>
+  <section>
+    <div class="container is-max-widescreen">
+      <h2 class="title">Introduction</h2>
+      <p>The concept of autonomous digital agents as helpful assistants is an enticing prospect. Enhanced by LLMs' formidable comprehension and response capabilities, we can envision various scenarios previously unimaginable. For instance, an LLM-based agent could support a daily routine that summarizes the online news from the open web for us. This integration of LLMs into everyday tasks heralds a significant shift in how we interact with machines, optimizing our efficiency and redefining the boundaries of machine-assisted productivity.</p>
+      <p>Tremendous efforts have been underway to construct auto web agents. One is AutoGPT, a popular open-source project that utilizes ChatGPT to integrate LLMs with predetermined tools such as web and local file browsing. Meanwhile, the development of agent-centric LLMs has gained significant momentum. Nevertheless, the majority of existing web agents are to date severely restricted in terms of practical applications, predominantly due to the following challenges:</p>
+      <ul>
+        <li>A universal action space covering all necessary task executions across various websites is absent.</li>
+        <li>The diversity and complexity of webpages and their tendentious verbosity pose a significant challenge for LLMs to comprehend the content and carry out correct operations accurately.</li>
+        <li>Existing agents notably lack the capability for correct inference and self-checking on web tasks. Once caught in an erroneous loop, they struggle to rectify the issue promptly.</li>
+      </ul>
+      <p>In this work, we introduce AutoWebGLM for building webpage navigation agents. It is built upon the open ChatGLM3-6B model. First, we propose various efficient data strategies to support the swift construction of a sizeable, reliable training dataset while state-of-the-art models cannot reliably complete data annotation tasks. Furthermore, by leveraging supervised and reinforcement learning methods, we train AutoWebGLM on top of the collected web agent dataset to achieve performance superiority on general webpage browsing tasks. A step further, we employ rejection sampling finetuning (RFT) for lifelong learning in specific web environments, enabling the agent to excel in a particular domain.</p>
+      <p>We develop and deploy a Chrome extension based on AutoWebGLM. Throughout our experiments, it can reason and perform operations on various websites to complete user tasks accurately, making it practically applicable to real-world services. In addition, we construct the first bilingual (English and Chinese) webpage browsing evaluation dataset to build AutoWebBench, given that websites from different regions have substantial stylistic variations. In conclusion, we make the following contributions in this paper:</p>
+      <ul>
+        <li>We design and develop the AutoWebGLM agent for effectively completing web browsing tasks through curriculum learning, bootstrapped by self-sampling reinforcement learning, and RFT in the web browsing environment.</li>
+        <li>We construct a real webpage browsing operation dataset of approximately 10,000 traces using model-assisted and manual methods, including the bilingual (English and Chinese) web browsing benchmark AutoWebBench.</li>
+        <li>We perform experiments to demonstrate that AutoWebGLM with six billion parameters achieves performance comparable to the most advanced LLM-based agents, and more importantly, it reaches a practically usable level for real-world web tasks.</li>
+      </ul>
+    </div>
+  </section>
+  <section>
+    <div class="container is-max-widescreen">
+      <h2 class="title">Methods</h2>
+      <p>We consider web browsing tasks as a sequential decision-making process. The state, denoted as S, includes the current page status, such as HTML, URL, and Window Position. The action set A contains all potential browsing operations, including click, type, scroll, etc. The state's transition is determined by the webpage's current state and the agent's output action. During the decision-making process, the function φ updates the historical information based on the previous history H_{t-1}, the most recent action A_{t-1}, and the current state S_t.</p>
+      <p>The policy π is the process for the agent to choose actions based on the current state and the history. A complete decision process starts from the initial state S_0 and history H_0, iterating through the policy π and transition function T. This iteration ceases when the action A_t is finish or reaches the maximum length.</p>
+      <p>We suggest using a unified observation space to enhance the model's webpage comprehension and operation level. The observation space should provide information as close as possible to what the browser's graphical interface can provide, thus maximizing the upper bound of the agent's capabilities. We identify four critical indicators for web browsing tasks: task description, simplified HTML, current location, and past operation records. The HTML provides the model with structural and content information about the page, while the current location information helps the model understand its position within the webpage. The record of past operations provides the model with historical context, which helps to generate more consistent subsequent operations. By incorporating these elements into the observation space, we strive to construct a more resilient and practical model that can handle various web browsing tasks effectively.</p>
+    </div>
+  </section>
+  <section>
+    <div class="container is-max-widescreen">
+      <h2 class="title">Experimental Results</h2>
+      <p>We perform experiments to demonstrate that AutoWebGLM with six billion parameters achieves performance comparable to the most advanced LLM-based agents, and more importantly, it reaches a practically usable level for real-world web tasks. Our system comprises two key components: interaction framework and LM agent. The LM agent learns from data procured from diverse sources. It further employs RL and RFT to bootstrap itself, thus enhancing web browsing capabilities. The interaction framework uses various web processing modules to organize concise HTML and other information for the LM agent to make decisions that are then executed by an automated browsing program. AutoWebGLM enhances interactive capacity and webpage navigation precision by amalgamating these components into a singular framework.</p>
+      <div style="text-align: center;">
+        <img src="./static/images/calibrated.png" alt="Performance of AutoWebGLM" width="95%">
+        <p>Figure 1: The performance of AutoWebGLM on various web browsing tasks in comparison with GPT-4 and open LLMs.</p>
+      </div>
+      <div style="text-align: center;">
+        <img src="./static/images/autowebglm-demo.png" alt="AutoWebGLM Demo" width="95%">
+        <p>Figure 2: Examples of AutoWebGLM's execution on four user tasks.</p>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="https://github.com/THUDM/AutoWebGLM" class="external-link">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <p>
+              This means you are free to borrow the <a href="https://github.com/THUDM/AutoWebGLM">source code</a> of this website (the website is hosted on the gh-pages branch of the repository), we just ask that you link back to this page in the footer. The design of this website is based on <a href="https://nerfies.github.io/">NERFies</a>, <a href="https://ds1000-code-gen.github.io/" target="_blank">DS-1000</a> and <a href="https://webshop-pnlp.github.io/" target="_blank">WebShop</a>. Please remember to remove the analytics code included in the header of the website which you do not want on your website.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
